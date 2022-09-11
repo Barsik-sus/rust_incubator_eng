@@ -60,7 +60,7 @@ mod tests
   #[ test ]
   fn mut_pinned_vec()
   {
-    let mut data = vec![ 1, 2, 3];
+    let mut data = vec![ 1, 2, 3 ];
     Pin::new( &mut data ).mut_me_somehow();
     assert_eq!( data, vec![ 0 ] );
   }
@@ -83,7 +83,7 @@ mod tests
   #[ test ]
   fn say_hi_vec()
   {
-    let data = vec![ 1, 2, 3];
+    let data = vec![ 1, 2, 3 ];
     Pin::new( &data ).say_hi();
   }
 
