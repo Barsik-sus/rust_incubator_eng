@@ -17,7 +17,8 @@ impl< T : Facts > Fact< T >
 {
   fn new() -> Self
   {
-    Self{
+    Self
+    {
       facts: T::facts(),
       _type: PhantomData
     }
@@ -33,7 +34,8 @@ impl< T > Facts for Vec< T >
 {
   fn facts() -> Vec< String >
   {
-    vec![
+    vec!
+    [
       "Some facts about Vec< T >".into(),
       "Second fact about Vec< T >".into()
     ]
@@ -44,7 +46,8 @@ impl Facts for String
 {
   fn facts() -> Vec< String >
   {
-    vec![
+    vec!
+    [
       "Some facts about String".into(),
       "Second fact about String".into()
     ]
