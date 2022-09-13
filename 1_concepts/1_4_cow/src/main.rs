@@ -1,17 +1,21 @@
 use std::borrow::Cow;
 
+const DEFAULT_PATH : &'static str = "/etc/app/app.conf";
+const VAR_CONFIG_KEY : &'static str = "APP_CONF";
+const CLI_CONFIG_ARG : &'static str = "--conf";
 
 fn conf_path() -> Result< Cow< 'static, str >, String >
 {
   match ( 
-    std::env::args().collect::< Vec< String > >().as_slice(),
-    std::env::var( "APP_CONF" )
+    std::env::args()
+    .skip_while( | arg | arg != CLI_CONFIG_ARG )
+    .skip( 1 ).next(),
+    std::env::var( VAR_CONFIG_KEY )
   )
   {
-    ( [ _, cmd ], _ ) if cmd == "--conf" => Err( "Path is empty".into() ),
-    ( [ _, cmd, path ], _ ) if cmd == "--conf" => Ok( format!( "{}", path ).into() ),
+    ( Some( path ), _ ) => Ok( path.into() ),
     ( _, Ok( path ) ) if !path.is_empty() => Ok ( path.into() ),
-    _ => Ok( "/etc/app/app.conf".into() )
+    _ => Ok( DEFAULT_PATH.into() )
   }
 }
 
@@ -34,14 +38,14 @@ mod tests
   #[ test ]
   fn app_conf_is_empty()
   {
-    std::env::set_var("APP_CONF", "");
+    std::env::set_var( VAR_CONFIG_KEY, "");
     assert_eq!( "/etc/app/app.conf", conf_path().unwrap() );
   }
 
   #[ test ]
   fn app_conf_is_not_empty()
   {
-    std::env::set_var("APP_CONF", "/home/user/app.conf");
+    std::env::set_var( VAR_CONFIG_KEY, "/home/user/app.conf");
     assert_eq!( "/home/user/app.conf", conf_path().unwrap() );
   }
 }
