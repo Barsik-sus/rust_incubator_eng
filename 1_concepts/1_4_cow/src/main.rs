@@ -6,15 +6,16 @@ const CLI_CONFIG_ARG : &'static str = "--conf";
 
 fn conf_path() -> Result< Cow< 'static, str >, String >
 {
-  match ( 
+  match
+  ( 
     std::env::args()
     .skip_while( | arg | arg != CLI_CONFIG_ARG )
     .skip( 1 ).next(),
-    std::env::var( VAR_CONFIG_KEY )
+    std::env::var( VAR_CONFIG_KEY ).ok()
   )
   {
-    ( Some( path ), _ ) => Ok( path.into() ),
-    ( _, Ok( path ) ) if !path.is_empty() => Ok ( path.into() ),
+    ( Some( path ), None ) => Ok( path.into() ),
+    ( _, Some( path ) ) if !path.is_empty() => Ok ( path.into() ),
     _ => Ok( DEFAULT_PATH.into() )
   }
 }
