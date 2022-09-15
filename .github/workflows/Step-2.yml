@@ -23,10 +23,10 @@ jobs:
     - name: 2_1_type_safety
       run: cargo test --package step_2_1 --lib -- tests
     - name: 2_2_mem_replace
-      run: cargo test --package step_2_2 --lib -- tests
+      run: cargo test --manifest-path=2_idioms/2_2_mem_replace/Cargo.toml
     - name: 2_3_bound_impl
-      run: cargo test --package step_2_3 --lib -- tests
+      run: cargo test --manifest-path=2_idioms/2_3_bound_impl/Cargo.toml
     - name: 2_4_generic_in_type_out
-      run: cargo test --package step_2_4 --lib -- tests
+      run: cargo test --manifest-path=2_idioms/2_4_generic_in_type_out/Cargo.toml
     - name: 2_final_task
-      run: cargo test --package step_2 --lib -- tests
+      run: cargo test --manifest-path=2_idioms/Cargo.toml
