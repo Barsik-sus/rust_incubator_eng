@@ -34,3 +34,5 @@ jobs:
       run: cargo test --manifest-path=1_concepts/1_8_thread_safety/Cargo.toml
     - name: 1_9_phantom
       run: cargo test --manifest-path=1_concepts/1_9_phantom/Cargo.toml
+    - name: 1_final_task
+      run: cargo test --manifest-path=1_concepts/Cargo.toml
