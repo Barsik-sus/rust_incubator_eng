@@ -1,0 +1,32 @@
+name: Rust
+
+on:
+  push:
+    branches: [ "master" ]
+    paths:
+    - 2_idioms/**
+  pull_request:
+    branches: [ "master" ]
+    paths:
+    - 2_idioms/**
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  Step-2:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: 2_1_type_safety
+      run: cargo test --manifest-path=2_idioms/2_1_type_safety/Cargo.toml
+    - name: 2_2_mem_replace
+      run: cargo test --manifest-path=2_idioms/2_2_mem_replace/Cargo.toml
+    - name: 2_3_bound_impl
+      run: cargo test --manifest-path=2_idioms/2_3_bound_impl/Cargo.toml
+    - name: 2_4_generic_in_type_out
+      run: cargo test --manifest-path=2_idioms/2_4_generic_in_type_out/Cargo.toml
+    - name: 2_final_task
+      run: cargo test --manifest-path=2_idioms/Cargo.toml
