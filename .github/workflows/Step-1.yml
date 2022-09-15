@@ -3,14 +3,18 @@ name: Rust
 on:
   push:
     branches: [ "master" ]
+    paths:
+    - 1_concepts/**
   pull_request:
     branches: [ "master" ]
+    paths:
+    - 1_concepts/**
 
 env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  build:
+  Step-1:
 
     runs-on: ubuntu-latest
 
@@ -34,3 +38,5 @@ jobs:
       run: cargo test --manifest-path=1_concepts/1_8_thread_safety/Cargo.toml
     - name: 1_9_phantom
       run: cargo test --manifest-path=1_concepts/1_9_phantom/Cargo.toml
+    - name: 1_concepts
+      run: cargo test --manifest-path=1_concepts/Cargo.toml
