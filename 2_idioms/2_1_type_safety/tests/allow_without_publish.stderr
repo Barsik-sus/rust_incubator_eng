@@ -1,0 +1,8 @@
+error[E0599]: no method named `allow` found for struct `Post<step_2_1::New>` in the current scope
+ --> tests/allow_without_publish.rs:6:8
+  |
+6 |   post.allow();
+  |        ^^^^^ method not found in `Post<step_2_1::New>`
+  |
+  = note: the method was found for
+          - `Post<step_2_1::Unmoderated>`
