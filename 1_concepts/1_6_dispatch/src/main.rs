@@ -1,6 +1,6 @@
-use std::{borrow::Cow, collections::HashMap};
+use std::{ borrow::Cow, collections::HashMap };
 
-trait Storage< K, V >
+pub trait Storage< K, V >
 {
   fn set( &mut self, key : K, val : V );
   fn get( &self, key : &K ) -> Option< &V >;
@@ -8,9 +8,9 @@ trait Storage< K, V >
 }
 
 #[ derive( Debug ) ]
-struct CanNotAddUser;
+pub struct CanNotAddUser;
 
-trait UserRepository
+pub trait UserRepository
 {
   fn add( &mut self, user : User ) -> Result< (), CanNotAddUser >;
   fn get( &self, key : u64 ) -> Option< &User >;
@@ -19,15 +19,15 @@ trait UserRepository
 }
 
 #[ derive( Debug, Default, Clone, PartialEq ) ]
-struct User
+pub struct User
 {
-  id : u64,
-  email : Cow< 'static, str >,
-  activated : bool,
+  pub id : u64,
+  pub email : Cow< 'static, str >,
+  pub activated : bool,
 }
 
 #[ derive( Default ) ]
-struct DB< K, V >
+pub struct DB< K, V >
 {
   storage : HashMap< K, V >,
 }
@@ -48,9 +48,19 @@ impl< K : Eq + std::hash::Hash, V > Storage< K, V > for DB< K, V >
   }
 }
 
-struct UserRepositoryStatic< S : Storage< u64, User > >
+pub struct UserRepositoryStatic< S : Storage< u64, User > >
 {
   storage : S
+}
+
+impl< S > UserRepositoryStatic< S >
+where
+  S : Storage< u64, User >
+{
+  pub fn new( storage : S ) -> Self
+  {
+    Self { storage }
+  }
 }
 
 impl< S > UserRepository for UserRepositoryStatic< S >
@@ -82,9 +92,17 @@ where
   }
 }
 
-struct UserRepositoryDynamic
+pub struct UserRepositoryDynamic
 {
   storage : Box< dyn Storage< u64, User > >
+}
+
+impl UserRepositoryDynamic
+{
+  pub fn new( storage : Box< dyn Storage< u64, User > > ) -> Self
+  {
+    Self { storage }
+  }
 }
 
 // it must be created with derive macro
