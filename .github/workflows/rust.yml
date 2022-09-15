@@ -1,0 +1,36 @@
+name: Rust
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: 1_1_default_clone_copy
+      run: cargo test --manifest-path=1_concepts/1_1_default_clone_copy/Cargo.toml
+    - name: 1_2_box_pin
+      run: cargo test --manifest-path=1_concepts/1_2_box_pin/Cargo.toml
+    - name: 1_3_rc_cell
+      run: cargo test --manifest-path=1_concepts/1_3_rc_cell/Cargo.toml
+    - name: 1_4_cow
+      run: cargo test --manifest-path=1_concepts/1_4_cow/Cargo.toml
+    - name: 1_5_convert_cast_deref
+      run: cargo test --manifest-path=1_concepts/1_5_convert_cast_deref/Cargo.toml
+    - name: 1_6_dispatch
+      run: cargo test --manifest-path=1_concepts/1_6_dispatch/Cargo.toml
+    - name: 1_7_sized
+      run: cargo test --manifest-path=1_concepts/1_7_sized/Cargo.toml
+    - name: 1_8_thread_safety
+      run: cargo test --manifest-path=1_concepts/1_8_thread_safety/Cargo.toml
+    - name: 1_9_phantom
+      run: cargo test --manifest-path=1_concepts/1_9_phantom/Cargo.toml
