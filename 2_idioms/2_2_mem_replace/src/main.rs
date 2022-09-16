@@ -26,12 +26,8 @@ impl< T : Clone > Trinity< T >
 {
   fn rotate( &mut self )
   {
-    let a = self.a.clone();
-    let b = self.b.clone();
-    let c = self.c.clone();
-    self.a = b;
-    self.b = c;
-    self.c = a;
+    std::mem::swap( &mut self.a, &mut self.c );
+    std::mem::swap( &mut self.a, &mut self.b );
   }
 }
 
