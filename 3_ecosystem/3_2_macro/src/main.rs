@@ -5,15 +5,13 @@ use std::collections::BTreeMap;
 macro_rules! btreemap
 {
   ( $( $x : expr ),* ) =>
-  {
-    {
-      let mut tmp_btreemap = BTreeMap::new();
-      $(
-        tmp_btreemap.insert( $x.0, $x.1 );
-      )*
-      tmp_btreemap
-    }
-  };
+  {{
+    let mut tmp_btreemap = BTreeMap::new();
+    $(
+      tmp_btreemap.insert( $x.0, $x.1 );
+    )*
+    tmp_btreemap
+  }};
 }
 
 fn main() {}
