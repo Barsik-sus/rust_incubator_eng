@@ -1,0 +1,14 @@
+integer = { ('0'..'9')+ }
+character = { 'a'..'z' | 'A'..'Z' }
+argument = { integer }
+
+fill = { character }
+align = { "<" | "^" | ">" }
+sign = { "+" | "-" }
+width = { count }
+precision = { count | "*" }
+ptype = { "?" | "" }
+count = { parameter | integer }
+parameter = { argument ~ "$" }
+
+format_spec = { ( ( fill )? ~ align )? ~ ( sign )? ~ ( "#" )? ~ ( "0" )? ~ ( width )? ~ ( "." ~ precision )? ~ ( ptype )? }
