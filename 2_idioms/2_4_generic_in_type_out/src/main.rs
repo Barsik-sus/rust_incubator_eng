@@ -1,19 +1,19 @@
-use std::net::{ IpAddr, SocketAddr };
+use std::{ net::{ IpAddr, SocketAddr }, borrow::Cow };
 
 fn main()
 {
   println!( "Refactor me!" );
 
-  let mut err = Error::new( "NO_USER".to_string() );
-  err.status( 404 ).message( "User not found".to_string() );
+  let mut err = Error::new( "NO_USER" );
+  err.status( 404 ).message( "User not found" );
 }
 
 #[ derive( Debug ) ]
 pub struct Error
 {
-  code : String,
+  code : Cow< 'static, str >,
   status : u16,
-  message : String,
+  message : Cow< 'static, str >,
 }
 
 impl Default for Error
@@ -22,20 +22,20 @@ impl Default for Error
   fn default() -> Self
   {
     Self {
-      code : "UNKNOWN".to_string(),
+      code : "UNKNOWN".into(),
       status : 500,
-      message : "Unknown error has happened.".to_string(),
+      message : "Unknown error has happened.".into(),
     }
   }
 }
 
 impl Error
 {
-  pub fn new( code : String ) -> Self
+  pub fn new< S >( code : S ) -> Self
+  where
+    S : Into< Cow< 'static, str > >,
   {
-    let mut err = Self::default();
-    err.code = code;
-    err
+    Self { code: code.into(), ..Self::default() }
   }
 
   pub fn status( &mut self, s : u16 ) -> &mut Self
@@ -44,9 +44,11 @@ impl Error
     self
   }
 
-  pub fn message( &mut self, m : String ) -> &mut Self
+  pub fn message< S >( &mut self, m : S ) -> &mut Self
+  where
+    S : Into< Cow< 'static, str > >,
   {
-    self.message = m;
+    self.message = m.into();
     self
   }
 }
@@ -56,7 +58,12 @@ pub struct Server( Option< SocketAddr > );
 
 impl Server
 {
-  pub fn bind( &mut self, ip : IpAddr, port : u16 ) { self.0 = Some( SocketAddr::new( ip, port ) ) }
+  pub fn bind< I >( &mut self, ip : I, port : u16 )
+  where
+    I : Into< IpAddr >
+  {
+    self.0 = Some( SocketAddr::new( ip.into(), port ) )
+  }
 }
 
 #[ cfg( test ) ]
@@ -66,7 +73,7 @@ mod server_spec
 
   mod bind
   {
-    use std::net::Ipv4Addr;
+    use std::net::{ Ipv4Addr, Ipv6Addr };
 
     use super::*;
 
@@ -75,10 +82,10 @@ mod server_spec
     {
       let mut server = Server::default();
 
-      server.bind( IpAddr::V4( Ipv4Addr::new( 127, 0, 0, 1 ) ), 8080 );
+      server.bind( Ipv4Addr::new( 127, 0, 0, 1 ), 8080 );
       assert_eq!( format!( "{}", server.0.unwrap() ), "127.0.0.1:8080" );
 
-      server.bind( "::1".parse().unwrap(), 9911 );
+      server.bind( "::1".parse::< Ipv6Addr >().unwrap(), 9911 );
       assert_eq!( format!( "{}", server.0.unwrap() ), "[::1]:9911" );
     }
   }
