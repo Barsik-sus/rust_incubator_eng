@@ -3,3 +3,11 @@ name = "step_3_2"
 version = "0.1.0"
 edition = "2021"
 publish = false
+
+[lib]
+proc_macro = true
+
+[dependencies]
+proc-macro2 = { version = "1.0", features = [ "nightly" ] }
+syn = { version = "1.0", features = [ "full" ] }
+quote = "1.0"
