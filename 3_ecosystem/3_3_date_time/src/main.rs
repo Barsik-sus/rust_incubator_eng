@@ -1,4 +1,4 @@
-use chrono::prelude::*;
+use chrono::{ prelude::*, LocalResult };
 
 
 fn main()
@@ -8,6 +8,10 @@ fn main()
 
 const NOW : &str = "2019-06-26";
 
+#[ derive( Debug, PartialEq ) ]
+struct InvalidDate;
+
+#[ derive( Debug, PartialEq ) ]
 struct User
 {
   birthdate : Date< Utc >,
@@ -15,9 +19,13 @@ struct User
 
 impl User
 {
-  fn with_birthdate( year : i32, month : u32, day : u32 ) -> Self
+  fn with_birthdate( year : i32, month : u32, day : u32 ) -> Result< Self, InvalidDate >
   {
-    User{ birthdate : Utc.ymd( year, month, day ) }
+    match Utc.ymd_opt( year, month, day )
+    {
+      LocalResult::Single( date ) => Ok( User{ birthdate : date } ),
+      _ => Err( InvalidDate )
+    }
   }
 
   /// Returns current age of [ `User`] in years.
@@ -58,7 +66,7 @@ mod age_spec
       ( ( 2019, 6, 25 ), 0 ),
     ]
     {
-      let user = User::with_birthdate( y, m, d );
+      let user = User::with_birthdate( y, m, d ).unwrap();
       assert_eq!( user.age(), expected );
     }
   }
@@ -75,7 +83,7 @@ mod age_spec
       ( ( 9999, 6, 27 ), 0 )
     ]
     {
-      let user = User::with_birthdate( y, m, d );
+      let user = User::with_birthdate( y, m, d ).unwrap();
       assert_eq!( user.age(), expected );
     }
   }
@@ -91,8 +99,23 @@ mod age_spec
       ( ( 2019, 6, 25 ), false ),
     ]
     {
-      let user = User::with_birthdate( y, m, d );
+      let user = User::with_birthdate( y, m, d ).unwrap();
       assert_eq!( user.is_adult(), expected );
     }
   }
+
+  #[ test ]
+  fn invalid_date()
+  {
+    for ( year, month, day ) in vec!
+    [
+      ( 2000, 13, 1 ),
+      ( 2000, 10, 32 ),
+      ( 1988, 2, 30 )
+    ]
+    {
+      assert_eq!( Err( InvalidDate ), User::with_birthdate( year, month, day ) );
+    }
+  }
+
 }
