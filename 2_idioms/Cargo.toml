@@ -3,3 +3,6 @@ name = "step_2"
 version = "0.1.0"
 edition = "2021"
 publish = false
+
+[dependencies]
+strum = { version = "0.21", features = [ "derive" ] }
