@@ -22,16 +22,12 @@ struct Trinity< T >
   c : T,
 }
 
-impl< T : Clone > Trinity< T >
+impl< T > Trinity< T >
 {
   fn rotate( &mut self )
   {
-    let a = self.a.clone();
-    let b = self.b.clone();
-    let c = self.c.clone();
-    self.a = b;
-    self.b = c;
-    self.c = a;
+    std::mem::swap( &mut self.a, &mut self.c );
+    std::mem::swap( &mut self.a, &mut self.b );
   }
 }
 
@@ -42,22 +38,22 @@ struct Solver< T >
   unsolved : Vec< Trinity< T > >,
 }
 
-impl< T : Clone + PartialEq > Solver< T >
+impl< T : PartialEq > Solver< T >
 {
   fn resolve( &mut self )
   {
-    let mut unsolved = Vec::with_capacity( self.unsolved.len() );
-    'l : for t in self.unsolved.iter_mut()
+    let mut unsolved = Vec::< Trinity< T > >::with_capacity( self.unsolved.len() );
+    'l : for mut t in std::mem::take( &mut unsolved ).into_iter()
     {
       for _ in 0 .. 3
       {
-        if *t == self.expected
+        if t == self.expected
         {
           continue 'l;
         }
         t.rotate();
       }
-      unsolved.push( t.clone() )
+      unsolved.push( t )
     }
     self.unsolved = unsolved;
   }
