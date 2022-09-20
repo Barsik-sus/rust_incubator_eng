@@ -1,19 +1,18 @@
-fn main()
-{
-  println!( "Implement me!" );
-}
+mod regex_parser;
+mod pest_parser;
 
-fn parse( input : &str ) -> ( Option< Sign >, Option< usize >, Option< Precision > ) { unimplemented!() }
+fn main() {}
+
 
 #[ derive( Debug, PartialEq ) ]
-enum Sign
+pub enum Sign
 {
   Plus,
   Minus,
 }
 
 #[ derive( Debug, PartialEq ) ]
-enum Precision
+pub enum Precision
 {
   Integer( usize ),
   Argument( usize ),
@@ -37,8 +36,10 @@ mod spec
       ( "a^#043.8?", None ),
     ]
     {
-      let ( sign, .. ) = parse( input );
-      assert_eq!( sign, expected );
+      let ( sign, .. ) = regex_parser::parse( input );
+      assert_eq!( sign, expected, "Regex parser" );
+      let ( sign, .. ) = pest_parser::parse( input );
+      assert_eq!( sign, expected, "Pest parser" );
     }
   }
 
@@ -54,8 +55,10 @@ mod spec
       ( "a^#043.8?", Some( 43 ) ),
     ]
     {
-      let ( _, width, _ ) = parse( input );
-      assert_eq!( width, expected );
+      let ( _, width, _ ) = regex_parser::parse( input );
+      assert_eq!( width, expected, "Regex parser" );
+      let ( _, width, _ ) = pest_parser::parse( input );
+      assert_eq!( width, expected, "Pest parser" );
     }
   }
 
@@ -71,8 +74,10 @@ mod spec
       ( "a^#043.8?", Some( Precision::Integer( 8 ) ) ),
     ]
     {
-      let ( _, _, precision ) = parse( input );
-      assert_eq!( precision, expected );
+      let ( _, _, precision ) = regex_parser::parse( input );
+      assert_eq!( precision, expected, "Regex parser" );
+      let ( _, _, precision ) = pest_parser::parse( input );
+      assert_eq!( precision, expected, "Pest parser" );
     }
   }
 }
