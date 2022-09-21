@@ -1,0 +1,3 @@
+{"lvl":"INFO","file":"app.log","time":"2022-09-21T11:45:54.648426809Z","msg":"Hi, I'm info"}
+{"lvl":"WARN","file":"app.log","time":"2022-09-21T11:45:54.648509268Z","msg":"Hi, I'm warn look at me"}
+{"lvl":"TRACE","file":"app.log","time":"2022-09-21T11:45:54.648564337Z","msg":"Hi, I'ma tracer"}
