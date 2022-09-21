@@ -1,10 +1,12 @@
 use crossbeam_channel::{ Receiver, Sender, RecvError };
+use rand::{ Rng, Fill };
 use rayon::prelude::*;
-use rand::{Rng, Fill};
 
-struct ProducerCantProduce;
+#[ derive( Debug ) ]
+pub struct ProducerCantProduce;
 
-struct Producer< T >
+#[ derive( Debug ) ]
+pub struct Producer< T >
 {
   matrix : [ T; 4096 ],
   channel : Sender< [ T; 4096 ] >
@@ -13,14 +15,15 @@ struct Producer< T >
 impl< T : Clone > Producer< T > 
 where [ T ] : Fill
 {
-  fn produce( &mut self ) -> Result< (), ProducerCantProduce >
+  pub fn produce( &mut self ) -> Result< (), ProducerCantProduce >
   {
     rand::thread_rng().fill( &mut self.matrix );
     self.channel.send( self.matrix.clone() ).or( Err( ProducerCantProduce ) )
   }
 }
 
-struct Consumer< T >
+#[ derive( Debug ) ]
+pub struct Consumer< T >
 {
   number : i8,
   chanel : Receiver< [ T; 4096 ] >
@@ -42,7 +45,7 @@ impl Consumer< u8 >
 
 fn main()
 {
-  let ( s, r) = crossbeam_channel::bounded::< [ u8; 4096 ] >( 2 );
+  let ( s, r ) = crossbeam_channel::bounded::< [ u8; 4096 ] >( 2 );
 
   let consumer_1 = r.clone();
   std::thread::spawn( | | 
