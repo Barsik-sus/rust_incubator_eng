@@ -1,3 +1,0 @@
-{"lvl":"INFO","file":"access.log","time":"2022-09-21T11:46:03.494821425Z","msg":"Hi, I'm local info"}
-{"lvl":"WARN","file":"access.log","time":"2022-09-21T11:46:03.494927609Z","msg":"Hi, I'm local warn look at me"}
-{"lvl":"TRACE","file":"access.log","time":"2022-09-21T11:46:03.494971351Z","msg":"Hi, I'ma tracer but local"}

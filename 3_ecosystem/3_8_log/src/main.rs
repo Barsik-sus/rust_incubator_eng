@@ -1,6 +1,6 @@
 use chrono::{ DateTime, Utc };
 use serde::Serialize;
-use std::{ sync::Mutex, io::Write };
+use std::{ sync::Mutex, io::{Write, BufRead} };
 use log::{ info, trace, warn, SetLoggerError, LevelFilter, Level };
 
 const APP_LOG_FILE : &'static str = "app.log";
@@ -132,17 +132,41 @@ impl log::Log for LocalLogger
 
 fn main()
 {
+  let _ = std::fs::remove_file( APP_LOG_FILE ).ok();
+
   GlobalLogger::init().unwrap().unwrap();
   info!( "Hi, I'm info" );
   warn!( "Hi, I'm warn look at me" );
   trace!( "Hi, Ama tracer" );
+
+  let file = std::fs::File::open( APP_LOG_FILE ).unwrap();
+  let reader = std::io::BufReader::new( file );
+  let mut lines = reader.lines().map( | l | l.unwrap() );
+  let line = lines.next().unwrap();
+  assert!( line.contains( "\"lvl\":\"INFO\",\"file\":\"app.log\"") );
+  let line = lines.next().unwrap();
+  assert!( line.contains( "\"lvl\":\"WARN\",\"file\":\"app.log\"") );
+  let line = lines.next().unwrap();
+  assert!( line.contains( "\"lvl\":\"TRACE\",\"file\":\"app.log\"") );
 }
 
 #[ test ]
 fn local_loger_test()
 {
+  let _ = std::fs::remove_file( LOCAL_LOG_FILE ).ok();
+
   LocalLogger::init().unwrap().unwrap();
   info!( "Hi, I'm local info" );
   warn!( "Hi, I'm local warn look at me" );
   trace!( "Hi, Ama tracer but local" );
+
+  let file = std::fs::File::open( LOCAL_LOG_FILE ).unwrap();
+  let reader = std::io::BufReader::new( file );
+  let mut lines = reader.lines().map( | l | l.unwrap() );
+  let line = lines.next().unwrap();
+  assert!( line.contains( "\"lvl\":\"INFO\",\"file\":\"access.log\"") );
+  let line = lines.next().unwrap();
+  assert!( line.contains( "\"lvl\":\"WARN\",\"file\":\"access.log\"") );
+  let line = lines.next().unwrap();
+  assert!( line.contains( "\"lvl\":\"TRACE\",\"file\":\"access.log\"") );
 }
