@@ -1,0 +1,13 @@
+CREATE TABLE "users"
+(
+  id SERIAL PRIMARY KEY,
+  name VARCHAR NOT NULL,
+  CONSTRAINT name_unique UNIQUE( name )
+);
+
+CREATE TABLE friendship
+(
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER REFERENCES "users"( id ) ON DELETE CASCADE NOT NULL,
+  friend_id INTEGER REFERENCES "users"( id ) ON DELETE CASCADE NOT NULL
+);
