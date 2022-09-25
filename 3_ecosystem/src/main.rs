@@ -1,14 +1,14 @@
 use std::io;
 
 use actix_cors::Cors;
-use actix_web::{HttpServer, App, web::Data, middleware};
-
+use actix_web::{ HttpServer, App, web::Data, middleware };
 
 mod db;
 mod handlers;
 mod schemas;
 
 use self::{ db::get_pool, handlers::register };
+
 
 #[ actix_web::main ]
 async fn main() -> io::Result< () >
