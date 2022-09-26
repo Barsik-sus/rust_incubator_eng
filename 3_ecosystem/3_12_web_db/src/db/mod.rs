@@ -13,18 +13,18 @@ use self::models::*;
 #[ derive( Serialize, Deserialize ) ]
 pub struct Article
 {
-  id : ID,
-  title : String,
-  body : String,
-  labels : Vec< String >
+  pub id : ID,
+  pub title : String,
+  pub body : String,
+  pub labels : Vec< String >
 }
 
 #[ derive( Serialize, Deserialize ) ]
 pub struct IArticle
 {
-  title : String,
-  body : String,
-  labels : Vec< String >
+  pub title : String,
+  pub body : String,
+  pub labels : Vec< String >
 }
 
 pub fn establish_connection() -> Pool< ConnectionManager< SqliteConnection > >

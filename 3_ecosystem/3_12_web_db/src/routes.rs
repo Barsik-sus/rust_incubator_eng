@@ -26,8 +26,8 @@ pub async fn get_article( db_conn : web::Data< DbPool >, a_id : web::Path< ( ID,
 #[ post( "/article" ) ]
 pub async fn post_article( db_conn : web::Data< DbPool >, article : web::Json< IArticle > ) -> actix_web::Result< impl Responder >
 {
-  db::insert_article( &mut db_conn.get().unwrap(), article.0 ).unwrap();
-  Ok( HttpResponse::Ok() )
+  let id = db::insert_article( &mut db_conn.get().unwrap(), article.0 ).unwrap();
+  Ok( web::Json( id ) )
 }
 
 // Removes an article by its ID
